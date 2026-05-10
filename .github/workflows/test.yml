@@ -1,0 +1,36 @@
+name: tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  unit-tests:
+    name: Pure-logic unit tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install minimal deps for pure-logic tests
+        # 只装纯逻辑测试需要的轻量依赖（不装 milvus/mineru/gradio 等重量级包，
+        # 这些依赖只在集成测试/运行时需要，本 CI 不跑那部分）
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest>=8.0
+          pip install "langchain-openai>=1.1" "langchain-core>=1.2" python-dotenv>=1.0
+
+      - name: Run pure-logic unit tests
+        run: pytest tests/test_pure_logic.py -v --tb=short

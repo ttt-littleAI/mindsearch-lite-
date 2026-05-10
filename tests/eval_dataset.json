@@ -1,0 +1,102 @@
+[
+  {
+    "id": "eval_001",
+    "question": "什么是Transformer的自注意力机制",
+    "ground_truth": "自注意力机制通过计算Query、Key、Value三个矩阵的注意力权重，让输入序列中每个位置能关注其他所有位置，公式为Attention(Q,K,V)=softmax(QK^T/sqrt(d_k))V",
+    "key_facts": [
+      "通过Q/K/V三个矩阵计算",
+      "每个位置关注所有其他位置",
+      "softmax(QK^T/sqrt(d_k))V公式"
+    ],
+    "expected_route": "STABLE",
+    "expected_skill": "academic_search",
+    "difficulty": "easy"
+  },
+  {
+    "id": "eval_002",
+    "question": "对比CNN和Transformer在图像任务上的优劣",
+    "ground_truth": "CNN具有局部感受野和平移不变性的归纳偏置，参数效率高，适合小数据集；Transformer通过全局注意力捕获长距离依赖，但需要大量数据和计算资源，在大规模数据下性能更优。ViT证明纯Transformer也能做图像分类。",
+    "key_facts": [
+      "CNN有局部感受野和平移不变性",
+      "CNN参数效率高适合小数据",
+      "Transformer捕获长距离依赖",
+      "Transformer需要大量数据",
+      "ViT证明Transformer可做图像分类"
+    ],
+    "expected_route": "STABLE",
+    "expected_skill": "compare_analysis",
+    "difficulty": "hard"
+  },
+  {
+    "id": "eval_003",
+    "question": "今天有什么重要的AI新闻",
+    "ground_truth": null,
+    "key_facts": [],
+    "expected_route": "REALTIME",
+    "expected_skill": "news_briefing",
+    "difficulty": "medium",
+    "note": "REALTIME类问题无固定标准答案，只评估路由和引用格式"
+  },
+  {
+    "id": "eval_004",
+    "question": "我上传的论文中关于实验结果的部分讲了什么",
+    "ground_truth": null,
+    "key_facts": [],
+    "expected_route": "PERSONAL",
+    "expected_skill": "document_qa",
+    "difficulty": "medium",
+    "note": "PERSONAL类依赖用户实际文档，评估路由准确性和检索是否命中"
+  },
+  {
+    "id": "eval_005",
+    "question": "BM25算法的原理和计算公式是什么",
+    "ground_truth": "BM25是基于TF-IDF的概率检索模型，核心公式为score(D,Q)=Σ IDF(qi) * (tf*(k1+1))/(tf+k1*(1-b+b*dl/avgdl))，其中k1控制词频饱和度，b控制文档长度归一化，IDF使用log((N-n+0.5)/(n+0.5)+1)",
+    "key_facts": [
+      "基于TF-IDF的概率检索模型",
+      "k1控制词频饱和度",
+      "b控制文档长度归一化",
+      "IDF计算使用文档频率"
+    ],
+    "expected_route": "STABLE",
+    "expected_skill": "academic_search",
+    "difficulty": "medium"
+  },
+  {
+    "id": "eval_006",
+    "question": "帮我总结一下RAG和传统搜索的区别",
+    "ground_truth": "RAG在传统检索基础上加入LLM生成环节：传统搜索返回文档列表由用户自己筛选阅读，RAG则是检索相关文档后由大模型理解、融合、生成自然语言回答。RAG的优势是直接给出答案并带引用，劣势是可能产生幻觉。",
+    "key_facts": [
+      "传统搜索返回文档列表",
+      "RAG加入LLM生成环节",
+      "RAG直接给出带引用的答案",
+      "RAG可能产生幻觉"
+    ],
+    "expected_route": "STABLE",
+    "expected_skill": "compare_analysis",
+    "difficulty": "medium"
+  },
+  {
+    "id": "eval_007",
+    "question": "最近GPT-4o有什么更新",
+    "ground_truth": null,
+    "key_facts": [],
+    "expected_route": "REALTIME",
+    "expected_skill": "news_briefing",
+    "difficulty": "easy",
+    "note": "REALTIME类，评估路由+是否成功联网搜索"
+  },
+  {
+    "id": "eval_008",
+    "question": "什么是RRF融合算法，为什么用在多路召回场景",
+    "ground_truth": "RRF(Reciprocal Rank Fusion)是多路召回的标准融合算法，公式为score=Σ1/(k+rank_i)。优势是不需要对各路分数做归一化，对排名差异鲁棒，计算简单。在搜索场景中用于融合向量召回和关键词召回的排名。",
+    "key_facts": [
+      "公式为Σ1/(k+rank_i)",
+      "不需要归一化",
+      "对排名差异鲁棒",
+      "用于融合向量和关键词召回"
+    ],
+    "expected_route": "STABLE",
+    "expected_skill": "academic_search",
+    "difficulty": "medium"
+  }
+]

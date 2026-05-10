@@ -1,0 +1,39 @@
+# MindSearch v2 — 已锁定版本（基于实际开发环境的 pip freeze 快照）
+# 严格复现请用 `pip install -r requirements.lock.txt`
+
+# ── LLM 编排 ──
+langchain==1.2.15
+langchain-core==1.2.26
+langchain-community==0.4.1
+langchain-openai==1.1.12
+langchain-text-splitters==1.1.1
+langgraph==1.1.6
+openai==2.30.0
+
+# ── 检索基础设施 ──
+pymilvus==3.0.0
+redis==5.0.0           # ⚠️ venv 实际未安装，按 README 启动 docker-compose 后再 pip install
+jieba==0.42.1          # ⚠️ BM25 粗排依赖，未装会导致 STABLE 路由失败
+
+# ── Web 搜索 ──
+duckduckgo_search==8.1.1
+requests==2.33.1
+
+# ── 文档解析 ──
+mineru==3.1.8
+
+# ── 服务 / API ──
+fastapi==0.135.3
+uvicorn==0.43.0
+python-multipart==0.0.24
+sse-starlette==3.3.4
+gradio==6.11.0
+mcp==1.27.0
+
+# ── 数据库 / ORM ──
+sqlalchemy==2.0.49
+pymysql==1.1.3
+
+# ── 配置 / 校验 ──
+pydantic==2.12.5
+python-dotenv==1.2.2

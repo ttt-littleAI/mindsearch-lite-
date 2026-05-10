@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>MindSearch-Lite 流程图</title>
+<style>
+  body { background: #0d1117; margin: 0; padding: 20px; display: flex; justify-content: center; }
+  .mermaid { background: #0d1117; }
+</style>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    flowchart: { curve: 'basis', padding: 15, nodeSpacing: 30, rankSpacing: 50 }
+  });
+</script>
+</head>
+<body>
+<pre class="mermaid">
+flowchart TD
+    %% ── 样式 ──
+    classDef userNode fill:#2563eb,stroke:#1d4ed8,color:#fff,stroke-width:2px
+    classDef planNode fill:#7c3aed,stroke:#6d28d9,color:#fff,stroke-width:2px
+    classDef ragNode fill:#0891b2,stroke:#0e7490,color:#fff,stroke-width:2px
+    classDef searchNode fill:#ea580c,stroke:#c2410c,color:#fff,stroke-width:2px
+    classDef selectNode fill:#d97706,stroke:#b45309,color:#fff,stroke-width:2px
+    classDef citeNode fill:#0d9488,stroke:#0f766e,color:#fff,stroke-width:2px
+    classDef evalNode fill:#dc2626,stroke:#b91c1c,color:#fff,stroke-width:2px
+    classDef synthNode fill:#16a34a,stroke:#15803d,color:#fff,stroke-width:2px
+    classDef reflNode fill:#9333ea,stroke:#7e22ce,color:#fff,stroke-width:2px
+    classDef endNode fill:#22c55e,stroke:#16a34a,color:#fff,stroke-width:3px
+    classDef stageNode fill:#1e293b,stroke:#475569,color:#94a3b8,stroke-width:1px,stroke-dasharray:5
+
+    %% ── 用户输入 ──
+    USER["👤 用户输入问题"]:::userNode
+
+    %% ── Planner ──
+    PLAN["🧠 Planner<br/>Graph Schema DAG 拆解"]:::planNode
+    PLAN_DETAIL["拆解为 SubQuestionNode<br/>id + question + dependencies<br/>输出 DAG 拓扑结构"]:::stageNode
+
+    %% ── RAG Retrieve ──
+    RAG_R["📚 RAG Retrieve<br/>从向量库检索已有知识"]:::ragNode
+
+    %% ── Searcher 两阶段 ──
+    SEARCHER["🔍 Searcher<br/>按 DAG 分层并行执行"]:::searchNode
+
+    subgraph SEARCHER_STAGES ["Searcher 内部流程（每个子问题）"]
+        direction TB
+        S1["Stage 1: Search<br/>DuckDuckGo 搜索 8 条候选"]:::searchNode
+        S2["Stage 2: Select<br/>LLM 筛选 3-5 条最相关结果"]:::selectNode
+        S3["Stage 3: Summarize<br/>生成总结 + 局部引用 [n]"]:::selectNode
+        S1 --> S2 --> S3
+    end
+
+    subgraph DAG_EXEC ["DAG 分层执行"]
+        direction TB
+        L0["层 0: 无依赖子问题<br/>（并行搜索）"]:::stageNode
+        L1["层 1: 依赖层0的子问题<br/>（等层0完成后并行）"]:::stageNode
+        LN["层 N: ..."]:::stageNode
+        L0 --> L1 --> LN
+    end
+
+    %% ── RAG Store ──
+    RAG_S["💾 RAG Store<br/>搜索结果存入向量库"]:::ragNode
+
+    %% ── Citation Map ──
+    CITE["📑 Citation Mapper<br/>局部引用 → 全局编号<br/>相同 URL 去重复用"]:::citeNode
+
+    %% ── Evaluator ──
+    EVAL{"⚖️ Evaluator<br/>信息是否充分?"}:::evalNode
+
+    %% ── Synthesizer ──
+    SYNTH["📝 Synthesizer<br/>汇总 + 全局引用 [N]<br/>附参考来源列表"]:::synthNode
+
+    %% ── Reflector ──
+    REFL{"🪞 Reflector<br/>反思 & 自我批评<br/>准确/完整/引用/偏见"}:::reflNode
+
+    %% ── 输出 ──
+    OUTPUT["✅ 最终回答<br/>带引用编号 + 参考来源"]:::endNode
+
+    %% ── 连线 ──
+    USER --> PLAN
+    PLAN --- PLAN_DETAIL
+    PLAN --> RAG_R
+    RAG_R --> SEARCHER
+    SEARCHER --- DAG_EXEC
+    SEARCHER --- SEARCHER_STAGES
+    SEARCHER --> RAG_S
+    RAG_S --> CITE
+    CITE --> EVAL
+
+    EVAL -- "❌ 信息不足<br/>追加子问题" --> PLAN
+    EVAL -- "✅ 信息充分" --> SYNTH
+
+    SYNTH --> REFL
+
+    REFL -- "✏️ REVISE<br/>需要修正" --> SYNTH
+    REFL -- "✅ ACCEPT<br/>质量合格" --> OUTPUT
+
+    %% ── 注释 ──
+    NOTE1["🔄 搜索闭环<br/>最多 3 轮"]:::stageNode
+    NOTE2["🔄 反思闭环<br/>最多 2 次修正"]:::stageNode
+
+    EVAL -.- NOTE1
+    REFL -.- NOTE2
+</pre>
+</body>
+</html>
