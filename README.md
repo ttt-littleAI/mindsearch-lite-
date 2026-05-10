@@ -1,7 +1,7 @@
 # MindSearch-Lite
 
-<!-- 推送到 GitHub 后把 USERNAME/REPO 替换为你的真实仓库路径 -->
-[![tests](https://github.com/USERNAME/REPO/actions/workflows/test.yml/badge.svg)](https://github.com/USERNAME/REPO/actions/workflows/test.yml)
+<!-- 推送到 GitHub 后把 ttt-littleAI/mindsearch-lite- 替换为你的真实仓库路径 -->
+[![tests](https://github.com/ttt-littleAI/mindsearch-lite-/actions/workflows/test.yml/badge.svg)](https://github.com/ttt-littleAI/mindsearch-lite-/actions/workflows/test.yml)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
